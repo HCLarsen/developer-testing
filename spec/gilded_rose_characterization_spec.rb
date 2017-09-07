@@ -2,7 +2,11 @@ require 'rspec'
 require 'approvals/rspec'
 
 require_relative '../lib/gilded_rose'
-require_relative '../lib/item'
+require_relative '../lib/regular_item'
+require_relative '../lib/aged_item'
+require_relative '../lib/backstage_pass'
+require_relative '../lib/legendary_item'
+require_relative '../lib/conjured_item'
 
 describe GildedRose do
 
@@ -18,23 +22,24 @@ private
 
 def item_attributes
   item_attributes = [
-    ['Mail Armour', 10, 20],
-    ['Mail Armour', 10, 1],
-    ["+5 Dexterity Vest", 10, 20],
-    ["Elixir of the Mongoose", 5, 7],
-    ['Aged Brie', 4, 9],
-    ['Aged Brie', 1, 49],
-    ['Backstage passes to a TAFKAL80ETC concert', 15, 17],
-    ['Backstage passes to a TAFKAL80ETC concert', 5, 49],
-    ['Sulfuras, Hand of Ragnaros', -1, 80]
+    RegularItem.new('Mail Armour', 10, 20),
+    RegularItem.new('Mail Armour', 10, 1),
+    RegularItem.new('+5 Dexterity Vest', 10, 20),
+    RegularItem.new('Elixir of the Mongoose', 5, 7),
+    AgedItem.new('Aged Brie', 4, 9),
+    AgedItem.new('Aged Brie', 1, 49),
+    BackstagePass.new('Backstage passes to a TAFKAL80ETC concert', 15, 17),
+    BackstagePass.new('Backstage passes to a TAFKAL80ETC concert', 5, 49),
+    LegendaryItem.new('Sulfuras, Hand of Ragnaros', -1, 80),
+    ConjuredItem.new('Conjured fake beard', 10, 30)
   ]
 end
 
 def characterize(subject, days)
   characterization = []
 
-  (1..days).each_with_index do |day|
-    subject.update_quality
+  (1..days).each do |day|
+    subject.age_one_day
 
     characterization << "Day #{day} of #{days}"
     subject.items.each { |item| characterization << "  #{item.to_s}" }
